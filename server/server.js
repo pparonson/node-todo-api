@@ -1,45 +1,65 @@
-const mongoose = require('mongoose');
 // application root
-// mongoose supports callback by default, however config to use es6 promise
-mongoose.Promise = global.Promise;
+const express = require('express');
+const bodyParser = require('body-parser');
 
-// connect to db
-mongoose.connect('mongodb://localhost:27017/TodoApp');
+const {mongoose} = require('./db/mongoose');
+const {Todo} = require('./models/todo');
+const {User} = require('./models/user');
+const PORT = 3000;
+// only Express route handlers in server.js file
+const app = express();
 
-// Create model to define data storage properties
-const Todo = mongoose.model('Todo', {
-  text: {
-    type: String
-  },
-  completed: {
-    type: Boolean
-  },
-  completedAt: {
-    // timestamp
-    type: Number
-  }
+app.use(bodyParser.json());
+
+// POST
+app.post('/todos', (req, res) => {
+  // the post body gets stored on the request obj by the bodyParser
+  // create the todo obj from client post request
+  const newTodo = new Todo({
+    text: req.body.text,
+    completed: req.body.completed,
+    completedAt: req.body.completedAt
+  });
+
+  newTodo.save()
+    .then((result) => {
+      // send document obj back to client in response
+      res.send(result);
+      console.log(JSON.stringify(result, undefined, 2));
+    }, (error) => {
+      // send HTTP status 400: "Bad request" back to client
+      console.log(`Error: ${error}`);
+      res.status(400).send(error);
+    });
 });
 
-// create new Todo instance
+app.listen(PORT, () => {
+  console.log(`Listening on port: ${PORT}`);
+});
+
+// GET
+
+// instances of obj models for testing
+
+// const newUser = new User({
+//   email: 'preston.aronson@gmail.com'
+// });
+
+// newUser.save()
+//   .then((result) => {
+//     console.log(`Result: ${JSON.stringify(result, undefined, 2)}`);
+//   }, (error) => {
+//     console.log(`Error: ${error}`);
+//   });
+
 // const newTodo = new Todo({
-//   text: 'Cook Dinner'
+//   text: 'refactored something to do',
+//   completedAt: 20170504
 // });
 //
-// // save() returns promise
-// newTodo.save().then((result) => {
-//   console.log(`Result: ${result}`);
-// }, (err) => {
-//   console.log(`Error: ${err}`);
-// });
-
-const newTodo2 = new Todo({
-  text: 'Create another todo with mongoose',
-  completed: false,
-  completedAt: 20170320
-});
-
-newTodo2.save().then((result) => {
-  console.log(`Result: ${JSON.stringify(result, undefined, 2)}`);
-}, (err) => {
-  console.log(`Error: ${err}`);
-});
+// newTodo.save()
+//   .then((result) => {
+//     console.log(`Return: ${JSON.stringify(result, undefined, 2)}`);
+//   }, (error) => {
+//     console.log(`Error: ${error}`);
+//   });

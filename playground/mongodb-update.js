@@ -10,38 +10,25 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   }
   console.log('Connected to MongoDB server');
 
-  // findOneAndUpdate
-  // findOneAndUpdate(filter, update, options, callback)
-  // db.collection('Todos').findOneAndUpdate({
-  //   _id: new ObjectID('58cfd415d7feaeac3bdfcdf7')
-  // }, {
-  //   $set: {
-  //     completed: true
-  //   }
-  // }, {
-  //   returnOriginal: false
-  // }).then((result) => {
-  //   console.log(result);
-  // }, (err) => {
-  //   console.log(err);
-  // });
+  db.collection('Users')
+    // args: findOneAndUpdate(filter, update, options, callback)
+    .findOneAndUpdate({
+      _id: new ObjectID("5909e03dd094267304cdc569")
+    }, {
+      $set: {
+        name: 'Preston Peter Aronson'
+      },
+      $inc: {
+        age: -10
+      }
+    }, {
+      returnOriginal: false
+    })
+    .then((result) => {
+      console.log(`Result: ${JSON.stringify(result, undefined, 2)}`);
+    }, (err) => {
+      console.log(`Error: ${err}`);
+    });
 
-  // update firstName and inc age
-  db.collection('Users').findOneAndUpdate({
-    _id: new ObjectID('58cf2caae733163ea1dedbb8')
-  }, {
-    $set: {
-      firstName: 'Preston'
-    },
-    $inc: {
-      age: 40
-    }
-  }, {
-    returnOriginal: false
-  }).then((result) => {
-    console.log(result);
-  }, (err) => {
-    console.log(err);
-  });
   // db.close();
 });
