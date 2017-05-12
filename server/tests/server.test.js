@@ -58,8 +58,6 @@ describe('server', () => {
           })
           .catch((err) => done(err));
         });
-
-      // make assumtion that todos.length is 0
     });
   });
 });

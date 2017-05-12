@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 // Create a model to define data storage properties
 // using mongoose validators and schemas
+
 const Todo = mongoose.model('Todo', {
   text: {
     type: String,
@@ -18,5 +19,6 @@ const Todo = mongoose.model('Todo', {
     default: null
   }
 });
+
 
 module.exports = {Todo};
