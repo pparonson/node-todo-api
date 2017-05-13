@@ -11,12 +11,15 @@ const PORT = 3000;
 const app = express();
 
 // body-parser is going to take json data conv to obj, and attach it to the req obj
+// the return type of the bodyParser.json() called fn is a fn
 app.use(bodyParser.json());
 
 app.post('/todos', (req, res) => {
   // console.log(req.body);
-  const {text} = req.body;
-  const newTodo = new Todo({text});
+  // const {text} = req.body;
+  const newTodo = new Todo({
+    text: req.body.text
+  });
 
   newTodo.save().then((result) => {
     res.send(JSON.stringify(result, undefined, 2));
@@ -39,3 +42,5 @@ app.listen(PORT, () => {
 // }, (error) => {
 //   console.log(`Error: `);
 // });
+
+module.exports = {app};

@@ -18,33 +18,35 @@ describe('server', () => {
     it('should create a new todo', (done) => {
       const text = 'Test todo text';
 
+      // mock post request
       request(app)
         .post('/todos')
         .send({text}) // this obj is conv to json by supertest
         .expect(200)
         .expect((res) => {
-          expect(res.body).toInclude({
-            text: 'Test todo text'
-          })
+          expect(res.body.text).toBe(text);
         })
+        // callback fn for error handling
         .end((err, res) => {
           if (err) {
             // return fn to exit cond execution
             return done(err);
           }
+
           Todo.find().then((result) => {
             expect(result.length).toBe(1);
             expect(result[0].text).toBe(text);
             done();
           })
-          .catch(() => done(e));
+          .catch((err) => done(err));
         });
     });
 
-    it('should NOT create a new todo with invalid body data', () => {
+
+    it('should NOT create a new todo with invalid body data', (done) => {
       // make a post request
       request(app)
-        .post('todos')
+        .post('/todos')
         .send({}) // and send as empty obj
         .expect(400) // expect 400 "bad request" error
         .end((err, res) => {
@@ -53,7 +55,7 @@ describe('server', () => {
           }
 
           Todo.find().then((result) => {
-            expect(result.length).toBe(1);
+            expect(result.length).toBe(0);
             done();
           })
           .catch((err) => done(err));
