@@ -22,11 +22,23 @@ app.post('/todos', (req, res) => {
   });
 
   newTodo.save().then((result) => {
-    res.send(JSON.stringify(result, undefined, 2));
+    res.send(result);
   }, (error) => {
     res.status(400) // "Bad Request"
       .send(JSON.stringify(error, undefined, 2));
   });
+});
+
+app.get('/todos', (req, res) => {
+  // return all todos
+  Todo.find()
+    .then((result) => {
+      //  return as obj rather than array for more flexibility
+      res.send({result});
+    }, (err) => {
+      res.status(400)
+        .send(JSON.stringify(err, undefined, 2));
+    });
 });
 
 app.listen(PORT, () => {
