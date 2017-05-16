@@ -1,5 +1,5 @@
-// application root
 const express = require('express');
+const {ObjectID} = require('mongodb');
 // parses string body into obj
 const bodyParser = require('body-parser');
 
@@ -39,6 +39,28 @@ app.get('/todos', (req, res) => {
       res.status(400)
         .send(JSON.stringify(err, undefined, 2));
     });
+});
+
+app.get('/todos/:id', (req, res) => {
+  const id = req.params.id;
+  // ObjectID.isValid()
+  if (!ObjectID.isValid(id)) {
+    // bad request
+    res.status(404).send();
+  }
+
+  Todo.findById(id).then((result) => {
+    if (!result) {
+      // Not found
+      res.status(404).send();
+      return;
+    }
+
+    res.send({result});
+  }).catch((e) => {
+    res.status(400).send();
+  });
+
 });
 
 app.listen(PORT, () => {
