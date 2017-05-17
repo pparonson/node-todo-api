@@ -52,11 +52,11 @@ app.get('/todos/:id', (req, res) => {
   Todo.findById(id).then((result) => {
     if (!result) {
       // Not found
-      res.status(404).send();
-      return;
+      return res.status(404).send();
     }
 
     res.send({result});
+    
   }).catch((e) => {
     res.status(400).send();
   });
