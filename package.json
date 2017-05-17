@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "start": "node server/server.js",
   "scripts": {
     "test": "mocha server/**/*.test.js"
+  },
+  "engines" : {
+    "node": "7.6.0"
   },
   "author": "Preston Aronson",
   "license": "ISC",

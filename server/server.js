@@ -7,8 +7,11 @@ const {mongoose} = require('./db/mongoose');
 const {Todo} = require('./models/todo');
 const {User} = require('./models/user');
 
-const PORT = 3000;
 const app = express();
+// set up env.port variable for app deployment
+const port = process.env.PORT || 3000;
+
+console.log(`Processes: ${JSON.stringify(process.env.MONGODB_URI)}`);
 
 // body-parser is going to take json data conv to obj, and attach it to the req obj
 // the return type of the bodyParser.json() called fn is a fn
@@ -56,15 +59,15 @@ app.get('/todos/:id', (req, res) => {
     }
 
     res.send({result});
-    
+
   }).catch((e) => {
     res.status(400).send();
   });
 
 });
 
-app.listen(PORT, () => {
-  console.log(`Listening on port: ${PORT}`);
+app.listen(port, () => {
+  console.log(`Listening on port: ${port}`);
 });
 
 // const newTodo = new Todo({
